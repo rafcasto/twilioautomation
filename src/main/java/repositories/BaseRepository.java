@@ -5,27 +5,36 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import utils.HeaderConstants;
+import utils.ReadConfigHelper;
 
 import java.util.HashMap;
 
 public class BaseRepository
 {
     private ObjectMapper mapper = new ObjectMapper();
-
-
-    public HttpResponse<String> post(String url, HashMap headers, String requestBody)
+    private ReadConfigHelper config;
+    public BaseRepository(ReadConfigHelper config)
+    {
+        this.config = config;
+    }
+    public HttpResponse<String> post(String url,  String requestBody)
     {
         HttpResponse<String> response = null;
         try
         {
             response =  Unirest.post(url)
-                    .headers(headers)
+                    .basicAuth(config.readTwilioSid(),config.readTwilioAuth())
+                    .headers(getHeaders())
                     .body(requestBody)
                     .asString();
+            if(response.getStatus() != 201){
+                throw new Exception(response.getBody());
+            }
+
         }
         catch (Exception ex)
         {
-
+            throw new RuntimeException(ex);
         }
         return response;
     }
@@ -58,7 +67,7 @@ public class BaseRepository
     {
         HashMap<String,String> headers = new HashMap<String,String>();
         headers.put(HeaderConstants.ACCEPT, "*/*");
-        headers.put(HeaderConstants.CONTENT_TYPE, "application/json");
+        headers.put(HeaderConstants.CONTENT_TYPE, "application/x-www-form-urlencoded");
         headers.put(HeaderConstants.CACHE_CONTROL, "no-cache");
         return headers;
     }

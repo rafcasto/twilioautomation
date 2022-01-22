@@ -13,7 +13,10 @@ public class ReadConfigHelper
     }
 
     public String readTwilioClientUrl(){return prop.getProperty("twilio.client");}
-
+    public String readTwilioSid(){return prop.getProperty("twilio.sid");}
+    public String readTwilioAuth(){return prop.getProperty("twilio.auth");}
+    public String readTwilioFromPhoneNumber(){return prop.getProperty("twilio.from.phone");}
+    public String readTwilioToPhoneNumber(){return prop.getProperty("twilio.to.phone");}
     private void initProps()
     {
         try

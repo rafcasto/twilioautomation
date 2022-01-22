@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 
 public class TwilioVoiceClientPageImpl extends BasePage implements TwilioVoiceClientPage{
     private By startUpDeviceBtn = By.id("startup-button");
+    private By acceptCallBtn = By.id("button-accept-incoming");
     private By logs = By.id("log");
 
     public TwilioVoiceClientPageImpl(WebDriverController driver) {
@@ -17,7 +18,8 @@ public class TwilioVoiceClientPageImpl extends BasePage implements TwilioVoiceCl
     }
 
     public void acceptCall() {
-
+        findElement(acceptCallBtn).click();
+        System.out.println("Call responed");
     }
 
     public void rejectCall() {

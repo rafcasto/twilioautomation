@@ -4,6 +4,7 @@ import controllers.ChromeController;
 import io.cucumber.core.backend.ObjectFactory;
 import io.cucumber.picocontainer.PicoFactory;
 import pages.TwilioVoiceClientPageImpl;
+import repositories.TwilioRepositoryImpl;
 import utils.ReadConfigHelper;
 
 public class CustomPicoFactory implements ObjectFactory {
@@ -14,6 +15,7 @@ public class CustomPicoFactory implements ObjectFactory {
         addClass(ChromeController.class);
         addClass(ReadConfigHelper.class);
         addClass(TwilioVoiceClientPageImpl.class);
+        addClass(TwilioRepositoryImpl.class);
     }
 
     public void start() {

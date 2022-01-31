@@ -1,6 +1,7 @@
 package repositories;
 
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -11,12 +12,37 @@ import java.util.HashMap;
 
 public class BaseRepository
 {
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper;
     private ReadConfigHelper config;
     public BaseRepository(ReadConfigHelper config)
     {
         this.config = config;
+        this.mapper = new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
     }
+
+    public HttpResponse<String> get(String url)
+    {
+        HttpResponse<String> response = null;
+        try
+        {
+            response =  Unirest.get(url)
+                    .basicAuth(config.readTwilioSid(),config.readTwilioAuth())
+                    .headers(getHeaders())
+                    .asString();
+            if(response.getStatus() != 200){
+                throw new Exception(response.getBody());
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
+        return response;
+    }
+
+
     public HttpResponse<String> post(String url,  String requestBody)
     {
         HttpResponse<String> response = null;
@@ -44,9 +70,8 @@ public class BaseRepository
         {
             return (T) mapper.readValue( json,t1);
         }catch (Exception ex){
-            System.out.println(ex.getStackTrace());
+           throw new RuntimeException(ex);
         }
-        return null;
     }
 
     public String convertObjectToString(Object userRequest)

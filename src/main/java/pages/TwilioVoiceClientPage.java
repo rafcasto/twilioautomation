@@ -6,4 +6,5 @@ public interface TwilioVoiceClientPage
     public void acceptCall();
     public void rejectCall();
     public void hangupCall();
+    public void waitForCallToFinish();
 }

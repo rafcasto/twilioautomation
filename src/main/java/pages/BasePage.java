@@ -28,4 +28,10 @@ public class BasePage
         WebDriverWait wait =  new WebDriverWait(driver.getDriver(),Duration.ofSeconds(30));
         wait.until(ExpectedConditions.textToBePresentInElement(element,text));
     }
+
+    public void waitForElementNotToBePresent(WebElement element)
+    {
+        WebDriverWait wait =  new WebDriverWait(driver.getDriver(),Duration.ofMinutes(3));
+        wait.until(ExpectedConditions.invisibilityOf(element));
+    }
 }

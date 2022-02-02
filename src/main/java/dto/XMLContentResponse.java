@@ -3,17 +3,13 @@ package dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 
 public class XMLContentResponse {
 
 
-    public String getSay() {
-        return readSay();
-    }
 
-    public void setSay(String say) {
-        this.say = say;
-    }
 
     public Gather getGather() {
         return gather;
@@ -25,20 +21,42 @@ public class XMLContentResponse {
 
     @JsonProperty("Gather")
     private Gather gather;
-    @JsonProperty("Say")
-    private String say;
 
-    private String readSay()
-    {
-        if(!StringUtils.isEmpty(say))
-        {
-            return say;
+    public String getSay() {
+        return readSay();
+    }
+
+    public void setSay(List<String> say) {
+        this.say = say;
+    }
+
+    @JsonProperty("Say")
+    private List<String> say;
+
+    private String readSay() {
+        if (say != null && !say.isEmpty()) {
+            return contactSay(say);
         }
 
-        if(gather != null && !StringUtils.isEmpty(gather.getSay())){
-            return gather.getSay();
+        if (gather != null && !gather.getSay().isEmpty()) {
+            return contactSay(gather.getSay());
         }
         return "";
     }
+
+    private String contactSay(List<String> say)
+    {
+        String completedString = null;
+        for (String s:say) {
+            if(completedString == null){
+                completedString = s + " ";
+            }else {
+                completedString += s + " ";
+            }
+
+        }
+        return completedString;
+    }
+
 
 }

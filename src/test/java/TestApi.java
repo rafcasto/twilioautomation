@@ -32,21 +32,6 @@ public class TestApi {
         System.out.println(call.getSid());
     }
 
-    private String getSay(String xml)
-    {
-        XMLContentResponse responseContext = convertXml(xml);
-        if(!StringUtils.isEmpty(responseContext.getSay()))
-        {
-            return responseContext.getSay();
-        }
-        Gather gather = responseContext.getGather();
-        if(gather != null && !StringUtils.isEmpty(gather.getSay()))
-        {
-            return gather.getSay();
-        }
-        return "";
-
-    }
 
     private XMLContentResponse convertXml(String xmlContent)
     {

@@ -58,7 +58,7 @@ public class TwilioStepDef {
         {
             EventTable expectedEvents = expectedIterator.next();
             EventTable actualEvents = actualIterator.next();
-            Assert.assertEquals("Messages do not match",expectedEvents.getSay(),actualEvents.getSay());
+            Assert.assertEquals("Messages do not match",expectedEvents.getSay(),actualEvents.getSay().trim());
 
         }
 

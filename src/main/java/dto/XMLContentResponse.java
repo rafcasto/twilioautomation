@@ -34,14 +34,19 @@ public class XMLContentResponse {
     private List<String> say;
 
     private String readSay() {
-        if (say != null && !say.isEmpty()) {
-            return contactSay(say);
-        }
-
+        String completeMessage = null;
         if (gather != null && !gather.getSay().isEmpty()) {
-            return contactSay(gather.getSay());
+            completeMessage = contactSay(gather.getSay());
         }
-        return "";
+        if (say != null && !say.isEmpty()) {
+            if(completeMessage == null){
+                completeMessage = contactSay(say);
+            }
+            else{
+                completeMessage += contactSay(say);
+            }
+        }
+        return completeMessage;
     }
 
     private String contactSay(List<String> say)

@@ -28,7 +28,8 @@ public class TwilioVoiceClientPageImpl extends BasePage implements TwilioVoiceCl
     }
 
     public void hangupCall() {
-
+        WebElement hangUp = findElement(hangup);
+        hangUp.click();
     }
 
     @Override

@@ -67,6 +67,10 @@ public class TwilioStepDef {
     @And("Wait for call to finish")
     public void waitForCallToFinish()
     {
-        page.waitForCallToFinish();
+        if(!this.callUtils.isCallComplete())
+        {
+            throw new RuntimeException("Increase the waiting time or attempts number call is not yet in complete state");
+        }
+        page.hangupCall();
     }
 }

@@ -42,7 +42,15 @@ public class Call {
     public void setDirection(String direction) {
         this.direction = direction;
     }
+    public String getStatus() {
+        return status;
+    }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    @JsonProperty("status")
+    private String status;
     @JsonProperty("date_updated")
     private String dateUpdated;
     @JsonProperty("from")
@@ -53,4 +61,6 @@ public class Call {
     private String sid;
     @JsonProperty("direction")
     private String direction;
+
+
 }

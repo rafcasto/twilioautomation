@@ -35,7 +35,7 @@ public class XMLContentResponse {
 
     private String readSay() {
         String completeMessage = null;
-        if (gather != null && !gather.getSay().isEmpty()) {
+        if ((gather != null && gather.getSay() != null) && !gather.getSay().isEmpty()) {
             completeMessage = contactSay(gather.getSay());
         }
         if (say != null && !say.isEmpty()) {

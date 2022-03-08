@@ -56,7 +56,7 @@ public class XMLContentResponse {
             if(completedString == null){
                 completedString = s + " ";
             }else {
-                completedString += s + " ";
+                completedString = completedString + " " + s;
             }
 
         }

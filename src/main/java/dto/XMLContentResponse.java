@@ -1,12 +1,13 @@
 package dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
 
-public class XMLContentResponse {
+public class XMLContentResponse  {
 
 
 
@@ -30,7 +31,7 @@ public class XMLContentResponse {
         this.say = say;
     }
 
-    @JsonProperty("Say")
+    @JacksonXmlProperty
     private List<String> say;
 
     private String readSay() {

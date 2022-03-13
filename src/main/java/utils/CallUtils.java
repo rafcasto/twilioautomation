@@ -4,8 +4,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import dto.*;
 import org.apache.commons.lang3.StringUtils;
+import org.xml.sax.InputSource;
 import repositories.TwilioRepository;
 
+
+import org.w3c.dom.*;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +22,7 @@ public class CallUtils
 {
     private TwilioRepository repository;
     private ReadConfigHelper config;
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     public CallUtils(TwilioRepository repository
                     , ReadConfigHelper config)
     {
@@ -43,7 +52,7 @@ public class CallUtils
         CallEventResponse eventResponse = repository.getCallEvents(call.getSid());
         List<Events> events = eventResponse.getEvents();
         for (Events event: events) {
-            XMLContentResponse responseContext = convertXml(event.getResponse().getResponse_body());
+            XMLContentResponse responseContext = convertXML(event.getResponse().getResponse_body());
             if(!StringUtils.isEmpty(responseContext.getSay())){
                 messages.add(new EventTable(){{
                     setSay(responseContext.getSay());
@@ -84,6 +93,66 @@ public class CallUtils
         }
         return convertString;
     }
+
+    private XMLContentResponse convertXML(String xmlResponse){
+        XMLContentResponse convertString = new XMLContentResponse();
+        try
+        {
+            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlResponse));
+            Document doc = db.parse(is);
+            doc.getDocumentElement().normalize();
+            NodeList nodeList=doc.getElementsByTagName("*");
+            convertString.setSay(listSay(nodeList));
+
+        }catch (Exception ex){}
+
+        return convertString;
+    }
+
+    private List<String> listSay(NodeList nodeList)
+    {
+        List<String> listSay = new ArrayList();
+        for (int i=0; i<nodeList.getLength(); i++) {
+            Element element = (Element) nodeList.item(i);
+            if(element.hasChildNodes()){
+                NodeList innerNodeList =  element.getElementsByTagName("*");
+                listSay.addAll(listInnerSay(innerNodeList)); 
+            }
+            String elementText = getElementText((Element) nodeList.item(i));
+            if(elementText != null)
+            {
+                listSay.add(elementText);
+            }
+
+        }
+        return listSay;
+    }
+
+    private List<String> listInnerSay(NodeList nodeList)
+    {
+        List<String> listSay = new ArrayList();
+        for (int i=0; i<nodeList.getLength(); i++) {
+            String elementText = getElementText((Element) nodeList.item(i));
+            if(elementText != null)
+            {
+                listSay.add(elementText);
+            }
+        }
+        return listSay;
+    }
+
+    private String getElementText(Element element)
+    {
+        if(element.getTagName().equals("Say"))
+        {
+            return element.getTextContent();
+        }
+        return null;
+    }
+
+
 
     private void waitFor(int seconds)
     {

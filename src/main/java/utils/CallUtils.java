@@ -55,7 +55,7 @@ public class CallUtils
             XMLContentResponse responseContext = convertXML(event.getResponse().getResponse_body());
             if(!StringUtils.isEmpty(responseContext.getSay())){
                 messages.add(new EventTable(){{
-                    setSay(responseContext.getSay());
+                    setSay(responseContext.getSay().replace("  "," "));
                 }});
             }
         }
@@ -114,17 +114,20 @@ public class CallUtils
     private List<String> listSay(NodeList nodeList)
     {
         List<String> listSay = new ArrayList();
+        String oldInnerTag = "";
         for (int i=0; i<nodeList.getLength(); i++) {
             Element element = (Element) nodeList.item(i);
-            if(element.hasChildNodes()){
+            if(element.hasChildNodes() && oldInnerTag.equals(element.getTagName())){
                 NodeList innerNodeList =  element.getElementsByTagName("*");
-                listSay.addAll(listInnerSay(innerNodeList)); 
+                listSay.addAll(listInnerSay(innerNodeList));
+
             }
             String elementText = getElementText((Element) nodeList.item(i));
             if(elementText != null)
             {
                 listSay.add(elementText);
             }
+            oldInnerTag = element.getTagName();
 
         }
         return listSay;

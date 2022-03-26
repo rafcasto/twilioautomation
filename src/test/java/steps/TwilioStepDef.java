@@ -7,6 +7,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import pages.TwilioVoiceClientPage;
 import repositories.TwilioRepository;
@@ -14,6 +15,8 @@ import utils.CallUtils;
 
 import java.util.Iterator;
 import java.util.List;
+
+import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 
 public class TwilioStepDef {
     private TwilioVoiceClientPage page;
@@ -59,6 +62,7 @@ public class TwilioStepDef {
             EventTable expectedEvents = expectedIterator.next();
             EventTable actualEvents = actualIterator.next();
             Assert.assertEquals("Messages do not match",expectedEvents.getSay(),actualEvents.getSay().trim());
+            MatcherAssert.assertThat(actualEvents.getSay().trim(),matchesPattern(expectedEvents.getSay().trim()));
 
         }
 

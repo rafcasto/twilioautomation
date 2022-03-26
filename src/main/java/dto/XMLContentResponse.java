@@ -55,9 +55,9 @@ public class XMLContentResponse  {
         String completedString = null;
         for (String s:say) {
             if(completedString == null){
-                completedString = s + " ";
+                completedString = s.trim() + " ";
             }else {
-                completedString = completedString + " " + s;
+                completedString = completedString + " " + s.trim();
             }
 
         }
